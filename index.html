@@ -1,0 +1,62 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>My Cool first Web Chat App</title>
+  <meta name="" content="">
+  <meta name="Akash Angle" content="My cool fist web chat app">
+
+  <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+<strong><center><h2><<**__My first Chat App__**></center></h2></center></strong>
+<center><img src="https://avatars.githubusercontent.com/u/59683122?v=4"</center>
+<h1>Vanilla JS based chat system made by Akash Angle in Navi Mumbai.</h1>
+<h4>Stupidly desgined for simplicity in mind.</h4>
+<p>Enter chat below and hit Enter to send<p>
+
+
+<input id=input placeholder="message" />
+<br> <br>
+
+Chat Output
+<div id=box></div>
+
+<script src=https://cdn.pubnub.com/sdk/javascript/pubnub.4.28.2.min.js></script>
+<script> (function() {
+        var pubnub = new PubNub({
+            publishKey: 'pub-c-e4520329-cf68-49e5-bf6f-197542a0ca5a',
+            subscribeKey: 'sub-c-4f9ff626-abd8-11eb-a2f9-7226f347561f'
+        });
+        function $(id) {
+            return document.getElementById(id);
+        }
+        var box = $('box'),
+            input = $('input'),
+            channel = '10chat-demo';
+        pubnub.addListener({
+            message: function(obj) {
+                box.innerHTML = ('' + obj.message).replace(/[<>]/g, '') + '<br>' + box.innerHTML
+            }
+        });
+        pubnub.subscribe({
+            channels: [channel]
+        });
+        input.addEventListener('keyup', function(e) {
+            if ((e.keyCode || e.charCode) === 13) {
+                pubnub.publish({
+                    channel: channel,
+                    message: input.value,
+                    x: (input.value = '')
+                });
+            }
+        });
+    })();
+</script>
+  
+</body>
+</html>
